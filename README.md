@@ -1,83 +1,83 @@
-# 🔍 Semantic Search Engine
-## AI Engineer Internship Assignment — CodeAtRandom
+#🔍 Semantic Search Engine
+##AI Engineer Internship Assignment — CodeAtRandom
 
 This project implements a complete semantic document retrieval system using:
 
--MiniLM SentenceTransformer embeddings (384-dim)
+MiniLM SentenceTransformer embeddings (384-dim)
 
--FAISS vector search (Inner Product index)
+FAISS vector search (Inner Product index)
 
--Caching system to avoid redundant embeddings
+Caching system to avoid redundant embeddings
 
--FastAPI backend with /search endpoint
+FastAPI backend with /search endpoint
 
--Ranking explanation (keyword overlap, score, normalization)
+Ranking explanation (keyword overlap, score, normalization)
 
--Streamlit UI (Bonus)
+Streamlit UI (Bonus)
 
 This repository includes a full working pipeline:
 preprocessing → embeddings + caching → FAISS index → search → ranking → API → UI.
 
-# 🚀 Features Overview
-## ✔ Task 1: Preprocessing
+#🚀 Features Overview
+##✔ Task 1: Preprocessing
 
--Download 20 Newsgroups dataset
+Download 20 Newsgroups dataset
 
--Clean + normalize text
+Clean + normalize text
 
--Save first 200 documents
+Save first 200 documents
 
-## ✔ Task 2A: Embedding Generator
+##✔ Task 2A: Embedding Generator
 
--MiniLM-L6-v2 embeddings
+MiniLM-L6-v2 embeddings
 
--Normalized vectors for cosine similarity
+Normalized vectors for cosine similarity
 
--Batch encoding
+Batch encoding
 
-## ✔ Task 2B: Cache Manager
+##✔ Task 2B: Cache Manager
 
--JSON-based cache (doc_id, embedding, hash, timestamp)
+JSON-based cache (doc_id, embedding, hash, timestamp)
 
--Only recompute embeddings if file changes
+Only recompute embeddings if file changes
 
-## ✔ Task 3: Vector Database (FAISS)
+##✔ Task 3: Vector Database (FAISS)
 
--Build + persist FAISS index (vector_index.faiss)
+Build + persist FAISS index (vector_index.faiss)
 
--Maintain ID-to-doc mapping (id_map.json)
+Maintain ID-to-doc mapping (id_map.json)
 
--Load index instantly for searching
+Load index instantly for searching
 
-## ✔ Task 4: Retrieval API
+##✔ Task 4: Retrieval API
 
--Built with FastAPI
+Built with FastAPI
 
--/search endpoint
+/search endpoint
 
--Input: {query, top_k}
+Input: {query, top_k}
 
--Output: Top-k ranked results with explanations
+Output: Top-k ranked results with explanations
 
-## ✔ Task 5: Ranking Explanation
+##✔ Task 5: Ranking Explanation
 
 Each result includes:
 
--Why it matched
+Why it matched
 
--Keyword overlap
+Keyword overlap
 
--Overlap ratio
+Overlap ratio
 
--Document length normalization score
+Document length normalization score
 
-# ⭐ Bonus Features (Implemented)
+#⭐ Bonus Features (Implemented)
 
--Persistent FAISS index
+Persistent FAISS index
 
--Streamlit UI interface (streamlit_app.py)
+Streamlit UI interface (streamlit_app.py)
 
-# 📁 Folder Structure
+#📁 Folder Structure
 ```bash
 semantic-search-engine/
 │
@@ -98,54 +98,54 @@ semantic-search-engine/
 ├── .gitignore
 └── README.md
 ```
-## 📌 Ignored (per assignment)
+##📌 Ignored (per assignment)
 
--data/
+data/
 
--cache/
+cache/
 
--vector_store/
+vector_store/
 
--models/
+models/
 
-## virtual environments
+##virtual environments
 ```bash
 ├── streamlit_app.py           # Bonus UI
 ├── requirements.txt
 ├── .gitignore
 └── README.md
 ```
-## 📌 Ignored (per assignment)
--data/
+##📌 Ignored (per assignment)
+data/
 
--cache/
+cache/
 
--vector_store/
+vector_store/
 
--models/
+models/
 
--virtual environments
+virtual environments
 
-# 🧠 How Caching Works
+#🧠 How Caching Works
 Caching is handled in src/cache_manager.py.
 
 For each document:
 
--Field	Purpose
--doc_id	Unique document ID
--embedding	384-dim MiniLM vector
--hash	SHA-256 of document text
--updated_at	Timestamp
+Field	Purpose
+doc_id	Unique document ID
+embedding	384-dim MiniLM vector
+hash	SHA-256 of document text
+updated_at	Timestamp
 
-### How the system uses the cache
+How the system uses the cache
 
--Compute SHA-256 of doc text
+Compute SHA-256 of doc text
 
--If doc exists in cache and hash matches → reuse embedding
+If doc exists in cache and hash matches → reuse embedding
 
--If hash changed or missing → compute new embedding
+If hash changed or missing → compute new embedding
 
--Save to cache/embeddings.json
+Save to cache/embeddings.json
 
 ✔ Saves massive processing time
 ✔ Only re-embeds changed files
@@ -156,54 +156,65 @@ doc_id	Unique document ID
 embedding	384-dim MiniLM vector
 hash	SHA-256 of document text
 updated_at	Timestamp
+How the system uses the cache
 
-### How the system uses the cache
+Compute SHA-256 of doc text
 
--Compute SHA-256 of doc text
+If doc exists in cache and hash matches → reuse embedding
 
--If doc exists in cache and hash matches → reuse embedding
+If hash changed or missing → compute new embedding
 
--If hash changed or missing → compute new embedding
-
--Save to cache/embeddings.json
+Save to cache/embeddings.json
 
 ✔ Saves massive processing time
 ✔ Only re-embeds changed files
 ✔ Exactly matches assignment requirements
 
-# ⚙️ How to Generate Embeddings & Build FAISS Index
+#⚙️ How to Generate Embeddings & Build FAISS Index
 Step 1 → Preprocess documents
-```bash
 python -m src.preprocess
-```
+
+
 Creates:
-```bash
+
 data/docs/doc_001.txt ...
 data/metadata.json
-```
-Step 2 → Build FAISS index
 
-Open Python:
-```bash
-from src.search_engine import SearchEngine
-se = SearchEngine()
-se.build_index()
-```
+Field	Purpose
+doc_id	Unique document ID
+embedding	384-dim MiniLM vector
+hash	SHA-256 of document text
+updated_at	Timestamp
+How the system uses the cache
 
-Produces:
-```bash
-vector_store/vector_index.faiss
-vector_store/id_map.json
-```
+Compute SHA-256 of doc text
+
+If doc exists in cache and hash matches → reuse embedding
+
+If hash changed or missing → compute new embedding
+
+Save to cache/embeddings.json
+
+✔ Saves massive processing time
+✔ Only re-embeds changed files
+✔ Exactly matches assignment requirements
+
+#⚙️ How to Generate Embeddings & Build FAISS Index
+Step 1 → Preprocess documents
+python -m src.preprocess
+
+Creates:
+
+data/docs/doc_001.txt ...
+data/metadata.json
 
 Step 3 → Test search engine
-```bash
 se.load_index()
 results = se.search("machine learning", top_k=5)
 print(results)
-```
 
-# 🌐 Starting the FastAPI Server
+
+#🌐 Starting the FastAPI Server
 
 Run:
 
@@ -212,7 +223,7 @@ uvicorn src.api:app --reload --host 0.0.0.0 --port 8000
 
 Open:
 
-## 👉 http://127.0.0.1:8000/docs
+##👉 http://127.0.0.1:8000/docs
 
 Test:
 
@@ -222,7 +233,7 @@ Test:
 }
 
 
-## 🔎 Sample Search Response
+##🔎 Sample Search Response
 {
   "doc_id": "doc_083",
   "score": 0.2705,
@@ -236,31 +247,31 @@ Test:
 }
 
 
-# 🖥 Streamlit UI (Bonus)
+#🖥 Streamlit UI (Bonus)
 
 Run:
-```bash
+
 streamlit run streamlit_app.py
-```
+
 
 Opens at:
 
-## 👉 http://localhost:8501
+##👉 http://localhost:8501
 
 Features:
 
--Search bar
+Search bar
 
--Top-K slider
+Top-K slider
 
--Document results
+Document results
 
--Explanation expandable panel
+Explanation expandable panel
 
--Clean and simple UI
+Clean and simple UI
 
 
-# 🧪 Design Choices (Why This Architecture?)
+#🧪 Design Choices (Why This Architecture?)
 ✔ MiniLM-L6-v2
 
 Fast, lightweight, high-quality sentence embeddings.
@@ -286,10 +297,10 @@ Zero-friction UI for demonstrations.
 Each module handles one responsibility, making the system clean and extensible.
 
 
-# 📦 Installation
+#📦 Installation
 pip install -r requirements.txt
 
-# 🧪 Future Improvements
+#🧪 Future Improvements
 
 🔧 Add multiprocessing for batch embedding
 🔧 Use ONNX runtime for faster embeddings
@@ -298,7 +309,7 @@ pip install -r requirements.txt
 🔧 Add evaluation metrics (nDCG, recall@k)
 🔧 Dockerize for deployment
 
-# 🤝 Contributing
+#🤝 Contributing
 
 Pull requests are welcome!
 For major changes, open an issue first to discuss improvements.
