@@ -3,17 +3,17 @@
 
 This project implements a complete semantic document retrieval system using:
 
-MiniLM SentenceTransformer embeddings (384-dim)
+-MiniLM SentenceTransformer embeddings (384-dim)
 
-FAISS vector search (Inner Product index)
+-FAISS vector search (Inner Product index)
 
-Caching system to avoid redundant embeddings
+-Caching system to avoid redundant embeddings
 
-FastAPI backend with /search endpoint
+-FastAPI backend with /search endpoint
 
-Ranking explanation (keyword overlap, score, normalization)
+-Ranking explanation (keyword overlap, score, normalization)
 
-Streamlit UI (Bonus)
+-Streamlit UI (Bonus)
 
 This repository includes a full working pipeline:
 preprocessing → embeddings + caching → FAISS index → search → ranking → API → UI.
@@ -21,61 +21,61 @@ preprocessing → embeddings + caching → FAISS index → search → ranking �
 # 🚀 Features Overview
 ## ✔ Task 1: Preprocessing
 
-Download 20 Newsgroups dataset
+-Download 20 Newsgroups dataset
 
-Clean + normalize text
+-Clean + normalize text
 
-Save first 200 documents
+-Save first 200 documents
 
 ## ✔ Task 2A: Embedding Generator
 
-MiniLM-L6-v2 embeddings
+-MiniLM-L6-v2 embeddings
 
-Normalized vectors for cosine similarity
+-Normalized vectors for cosine similarity
 
-Batch encoding
+-Batch encoding
 
 ## ✔ Task 2B: Cache Manager
 
-JSON-based cache (doc_id, embedding, hash, timestamp)
+-JSON-based cache (doc_id, embedding, hash, timestamp)
 
-Only recompute embeddings if file changes
+-Only recompute embeddings if file changes
 
 ## ✔ Task 3: Vector Database (FAISS)
 
-Build + persist FAISS index (vector_index.faiss)
+-Build + persist FAISS index (vector_index.faiss)
 
-Maintain ID-to-doc mapping (id_map.json)
+-Maintain ID-to-doc mapping (id_map.json)
 
-Load index instantly for searching
+-Load index instantly for searching
 
 ## ✔ Task 4: Retrieval API
 
-Built with FastAPI
+-Built with FastAPI
 
-/search endpoint
+-/search endpoint
 
-Input: {query, top_k}
+-Input: {query, top_k}
 
-Output: Top-k ranked results with explanations
+-Output: Top-k ranked results with explanations
 
 ## ✔ Task 5: Ranking Explanation
 
 Each result includes:
 
-Why it matched
+-Why it matched
 
-Keyword overlap
+-Keyword overlap
 
-Overlap ratio
+-Overlap ratio
 
-Document length normalization score
+-Document length normalization score
 
 # ⭐ Bonus Features (Implemented)
 
-Persistent FAISS index
+-Persistent FAISS index
 
-Streamlit UI interface (streamlit_app.py)
+-Streamlit UI interface (streamlit_app.py)
 
 # 📁 Folder Structure
 ```bash
@@ -100,13 +100,13 @@ semantic-search-engine/
 ```
 ## 📌 Ignored (per assignment)
 
-data/
+-data/
 
-cache/
+-cache/
 
-vector_store/
+-vector_store/
 
-models/
+-models/
 
 ## virtual environments
 ```bash
@@ -116,84 +116,56 @@ models/
 └── README.md
 ```
 ## 📌 Ignored (per assignment)
-data/
+-data/
 
-cache/
+-cache/
 
-vector_store/
+-vector_store/
 
-models/
+-models/
 
-virtual environments
+-virtual environments
 
 # 🧠 How Caching Works
 Caching is handled in src/cache_manager.py.
 
 For each document:
 
-Field	Purpose
-doc_id	Unique document ID
-embedding	384-dim MiniLM vector
-hash	SHA-256 of document text
-updated_at	Timestamp
+-Field	Purpose
+-doc_id	Unique document ID
+-embedding	384-dim MiniLM vector
+-hash	SHA-256 of document text
+-updated_at	Timestamp
 
-How the system uses the cache
+### How the system uses the cache
 
-Compute SHA-256 of doc text
+-Compute SHA-256 of doc text
 
-If doc exists in cache and hash matches → reuse embedding
+-If doc exists in cache and hash matches → reuse embedding
 
-If hash changed or missing → compute new embedding
+-If hash changed or missing → compute new embedding
 
-Save to cache/embeddings.json
-
-✔ Saves massive processing time
-✔ Only re-embeds changed files
-✔ Exactly matches assignment requirements
-
-Field	Purpose
-doc_id	Unique document ID
-embedding	384-dim MiniLM vector
-hash	SHA-256 of document text
-updated_at	Timestamp
-How the system uses the cache
-
-Compute SHA-256 of doc text
-
-If doc exists in cache and hash matches → reuse embedding
-
-If hash changed or missing → compute new embedding
-
-Save to cache/embeddings.json
+-Save to cache/embeddings.json
 
 ✔ Saves massive processing time
 ✔ Only re-embeds changed files
 ✔ Exactly matches assignment requirements
 
-# ⚙️ How to Generate Embeddings & Build FAISS Index
-Step 1 → Preprocess documents
-python -m src.preprocess
-
-
-Creates:
-
-data/docs/doc_001.txt ...
-data/metadata.json
-
 Field	Purpose
 doc_id	Unique document ID
 embedding	384-dim MiniLM vector
 hash	SHA-256 of document text
 updated_at	Timestamp
-How the system uses the cache
 
-Compute SHA-256 of doc text
+### How the system uses the cache
 
-If doc exists in cache and hash matches → reuse embedding
+-Compute SHA-256 of doc text
 
-If hash changed or missing → compute new embedding
+-If doc exists in cache and hash matches → reuse embedding
 
-Save to cache/embeddings.json
+-If hash changed or missing → compute new embedding
+
+-Save to cache/embeddings.json
 
 ✔ Saves massive processing time
 ✔ Only re-embeds changed files
@@ -201,18 +173,35 @@ Save to cache/embeddings.json
 
 # ⚙️ How to Generate Embeddings & Build FAISS Index
 Step 1 → Preprocess documents
+```bash
 python -m src.preprocess
-
+```
 Creates:
-
+```bash
 data/docs/doc_001.txt ...
 data/metadata.json
+```
+Step 2 → Build FAISS index
+
+Open Python:
+```bash
+from src.search_engine import SearchEngine
+se = SearchEngine()
+se.build_index()
+```
+
+Produces:
+```bash
+vector_store/vector_index.faiss
+vector_store/id_map.json
+```
 
 Step 3 → Test search engine
+```bash
 se.load_index()
 results = se.search("machine learning", top_k=5)
 print(results)
-
+```
 
 # 🌐 Starting the FastAPI Server
 
@@ -250,9 +239,9 @@ Test:
 # 🖥 Streamlit UI (Bonus)
 
 Run:
-
+```bash
 streamlit run streamlit_app.py
-
+```
 
 Opens at:
 
@@ -260,15 +249,15 @@ Opens at:
 
 Features:
 
-Search bar
+-Search bar
 
-Top-K slider
+-Top-K slider
 
-Document results
+-Document results
 
-Explanation expandable panel
+-Explanation expandable panel
 
-Clean and simple UI
+-Clean and simple UI
 
 
 # 🧪 Design Choices (Why This Architecture?)
