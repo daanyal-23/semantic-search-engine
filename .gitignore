@@ -1,0 +1,34 @@
+# Ignore data directory (per assignment requirement)
+data/
+
+# Ignore cache (contains embeddings.json)
+cache/
+
+# Ignore FAISS vector store (contains large index)
+vector_store/
+
+# Python standard ignores
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+*.db
+*.sqlite3
+
+# Virtual environment (if inside project)
+venv/
+env/
+ENV/
+.venv/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Streamlit cache
+.streamlit/
+
+# IDE configs
+.vscode/
+.idea/
