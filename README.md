@@ -1,4 +1,4 @@
-**🔍 Semantic Search Engine
+🔍 Semantic Search Engine
 AI Engineer Internship Assignment — CodeAtRandom
 
 This project implements a complete semantic document retrieval system using:
