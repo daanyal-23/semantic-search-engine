@@ -297,6 +297,7 @@ Zero-friction UI for demonstrations.
 Each module handles one responsibility, making the system clean and extensible.
 
 
+<<<<<<< HEAD
 #📦 Installation
 pip install -r requirements.txt
 
@@ -315,3 +316,4 @@ Pull requests are welcome!
 For major changes, open an issue first to discuss improvements.
 
 ❤️ Made with Love — and FAISS, Transformers, FastAPI, and Streamlit
+
