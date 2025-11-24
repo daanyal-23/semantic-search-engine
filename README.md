@@ -182,7 +182,7 @@ results = se.search("machine learning", top_k=5)
 print(results)
 
 
-#🌐 Starting the FastAPI Server
+# 🌐 Starting the FastAPI Server
 
 Run:
 
